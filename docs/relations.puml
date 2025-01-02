@@ -1,0 +1,19 @@
+@startuml
+Application --> Container : uses
+Application --> Request : handles
+Application --> Handler : manages
+Application --> YamlRouteLoader : uses
+Application --> Response : returns
+
+Container --> EntityManager : manages
+Container --> Repository : provides
+Container --> ExportController : creates
+
+ExportController --> EntityManager : uses
+EntityManager --> Repository : provides
+Repository --> Entity : manages
+
+ConsoleApplication --> Container : uses
+ConsoleApplication --> Command : manages
+
+@enduml

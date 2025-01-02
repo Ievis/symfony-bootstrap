@@ -1,0 +1,5 @@
+routes:
+  test:
+    - test:
+        path: '/test'
+        controller: 'App\Controller\FrontController'

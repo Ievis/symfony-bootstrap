@@ -1,0 +1,16 @@
+@startuml
+start
+:Error Occurs;
+
+if (Type of Error?) then (Exception)
+  :Exception Handler;
+else (Fatal Error)
+  :Shutdown Handler;
+endif
+
+:Log Error;
+:Create JSON Response;
+:Send Response;
+
+stop
+@enduml

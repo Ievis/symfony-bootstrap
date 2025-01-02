@@ -1,0 +1,45 @@
+@startuml
+skinparam componentStyle uml2
+
+class Request {
+  +createFromGlobals()
+  +getPathInfo()
+}
+
+class Application {
+  -RequestContext requestContext
+  -RouteCollection routeCollection
+  -Logger logger
+  -Handler exceptionHandler
+  +__construct()
+  +loadRoutes()
+  +initExceptionHandler()
+  +handle(Request)
+}
+
+class Handler {
+  -Logger logger
+  +init(Logger)
+  +handleShutdown()
+  +handleException(Throwable)
+}
+
+class YamlRouteLoader {
+  +load(string): RouteCollection
+}
+
+class ExportController {
+  +__invoke(): Response
+}
+
+class Response {
+  +send()
+}
+
+Application --> Request : uses
+Application --> Handler : manages
+Application --> YamlRouteLoader : uses
+Application --> ExportController : routes to
+Application --> Response : returns
+Handler --> Response : creates on error
+@enduml
