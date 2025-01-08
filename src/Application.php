@@ -6,11 +6,16 @@ namespace App;
 
 use App\Config\YamlRouteLoader;
 use App\Exception\ExceptionHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\TerminableInterface;
 use Symfony\Component\Routing\RouteCollection;
 
-class Application
+class Application implements HttpKernelInterface, TerminableInterface
 {
     /**
      * @var RouteCollection
@@ -34,8 +39,11 @@ class Application
      */
     public function __construct()
     {
-        $this->logger           = new Logger('app');
+        $this->yamlRouteLoader  = new YamlRouteLoader();
         $this->exceptionHandler = new ExceptionHandler();
+        $this->logger           = new Logger('app');
+        $this->logger->pushHandler(new StreamHandler(__DIR__. '/../logs/app.log', Level::Debug));
+        $this->logger->info('Application created');
     }
 
     /**
@@ -56,10 +64,22 @@ class Application
 
     /**
      * @param Request $request
+     * @param int $type
+     * @param bool $catch
+     * @return Response
+     */
+    public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response
+    {
+        return new Response();
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
      * @return void
      */
-    public function handle(Request $request): void
+    public function terminate(Request $request, Response $response): void
     {
-        //
+        // TODO: Implement terminate() method.
     }
 }

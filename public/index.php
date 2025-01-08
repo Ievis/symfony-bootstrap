@@ -11,4 +11,6 @@ $request = Request::createFromGlobals();
 $app     = new Application();
 $app->initExceptionHandler();
 $app->loadRoutes();
-$app->handle($request);
+$response = $app->handle($request);
+$response->send();
+$app->terminate($request, $response);

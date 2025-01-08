@@ -1,45 +1,50 @@
 @startuml
 skinparam componentStyle uml2
 
-class Request {
+class \Symfony\Component\HttpFoundation\Request {
   +createFromGlobals()
   +getPathInfo()
 }
 
-class Application {
-  -RequestContext requestContext
-  -RouteCollection routeCollection
-  -Logger logger
-  -Handler exceptionHandler
-  +__construct()
-  +loadRoutes()
-  +initExceptionHandler()
-  +handle(Request)
+interface HttpKernelInterface {
+  +handle(\Symfony\Component\HttpFoundation\Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): \Symfony\Component\HttpFoundation\Response;
 }
 
-class Handler {
-  -Logger logger
-  +init(Logger)
+class Application {
+  -\Symfony\Component\Routing\RequestContext requestContext
+  -\Symfony\Component\Routing\RouteCollection routeCollection
+  -\Monolog\Logger logger
+  -\App\Exception\Handler exceptionHandler
+  +__construct()
+  +loadRoutes()
+  +initException\App\Exception\Handler()
+  +handle(\Symfony\Component\HttpFoundation\Request)
+}
+
+class \App\Exception\Handler {
+  -\Monolog\Logger logger
+  +init(\Monolog\Logger)
   +handleShutdown()
   +handleException(Throwable)
 }
 
 class YamlRouteLoader {
-  +load(string): RouteCollection
+  +load(string): \Symfony\Component\Routing\RouteCollection
 }
 
 class ExportController {
-  +__invoke(): Response
+  +__invoke(): \Symfony\Component\HttpFoundation\Response
 }
 
-class Response {
+class \Symfony\Component\HttpFoundation\Response {
   +send()
 }
 
-Application --> Request : uses
-Application --> Handler : manages
+HttpKernelInterface --> Application
+Application --> \Symfony\Component\HttpFoundation\Request : uses
+Application --> \App\Exception\Handler : manages
 Application --> YamlRouteLoader : uses
 Application --> ExportController : routes to
-Application --> Response : returns
-Handler --> Response : creates on error
+Application --> \Symfony\Component\HttpFoundation\Response : returns
+\App\Exception\Handler --> \Symfony\Component\HttpFoundation\Response : creates on error
 @enduml
