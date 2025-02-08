@@ -1,0 +1,9 @@
+services:
+  fpm:
+    image: php-lessons:1.0
+    container_name: fpm
+    env_file: "../.env"
+    ports:
+      - "10000:80"
+    volumes:
+      - "../:/var/www"

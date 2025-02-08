@@ -70,7 +70,8 @@ class Application implements HttpKernelInterface, TerminableInterface
      */
     public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response
     {
-        return new Response();
+        $response = new Response('Hello from symfony');
+        return $response;
     }
 
     /**
